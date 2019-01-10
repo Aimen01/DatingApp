@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.Api.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.Api
 {
@@ -27,9 +30,21 @@ namespace DatingApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x=> x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
+            services.AddScoped<IAuthRepository, AuthRepository>();//addscope mean service create ones each scope
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // specify the Authintication scema
+            .AddJwtBearer(options =>{
+                options.TokenValidationParameters = new TokenValidationParameters
+                {// what do you want to vaildate 
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII // here we want to pass our key which is stored in appsettings
+                    .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),// we Encode it because semmetric wants bytes
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,11 +57,12 @@ namespace DatingApp.Api
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-               // app.UseHsts();
+                // app.UseHsts();
             }
 
             //app.UseHttpsRedirection();
-            app.UseCors(x=> x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+            app.UseAuthentication(); // to tell our application about it
             app.UseMvc();
         }
     }
