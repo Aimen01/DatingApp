@@ -35,7 +35,8 @@ namespace DatingApp.Api
             services.AddCors();
             services.AddScoped<IAuthRepository, AuthRepository>();//addscope mean service create ones each scope
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // specify the Authintication scema
-            .AddJwtBearer(options =>{
+            .AddJwtBearer(options =>
+            {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {// what do you want to vaildate 
                     ValidateIssuerSigningKey = true,
@@ -61,7 +62,10 @@ namespace DatingApp.Api
             }
 
             //app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+            // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+
+            app.UseCors(x => x.WithOrigins("http://localhost:4200")
+                           .AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             app.UseAuthentication(); // to tell our application about it
             app.UseMvc();
         }
