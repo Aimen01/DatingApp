@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp.Api.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -31,9 +32,15 @@ namespace DatingApp.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddJsonOptions(opt => {
+                opt.SerializerSettings.ReferenceLoopHandling =  Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
             services.AddCors();
+            services.AddAutoMapper();
+            services.AddTransient<Seeds>();
             services.AddScoped<IAuthRepository, AuthRepository>();//addscope mean service create ones each scope
+            services.AddScoped<IDatingRepository,DatingRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // specify the Authintication scema
             .AddJwtBearer(options =>
             {
@@ -49,7 +56,7 @@ namespace DatingApp.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seeds seeder)
         {
             if (env.IsDevelopment())
             {
@@ -63,7 +70,7 @@ namespace DatingApp.Api
 
             //app.UseHttpsRedirection();
             // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
-
+           // seeder.SeedUsers();
             app.UseCors(x => x.WithOrigins("http://localhost:4200")
                            .AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             app.UseAuthentication(); // to tell our application about it
