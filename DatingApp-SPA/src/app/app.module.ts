@@ -1,3 +1,4 @@
+import { AuthGuard } from './_guards/auth.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
@@ -36,7 +37,8 @@ import { MassagesComponent } from './massages/massages.component';
    ],
    providers: [
       AuthService,
-      AlertifyService
+      AlertifyService,
+      AuthGuard
    ],
    bootstrap: [
       AppComponent
