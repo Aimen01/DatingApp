@@ -27,6 +27,8 @@ namespace DatingApp.Api.Migrations
 
                     b.Property<bool>("IsMain");
 
+                    b.Property<string>("PublicId");
+
                     b.Property<string>("Url");
 
                     b.Property<int>("UserId");
@@ -35,7 +37,7 @@ namespace DatingApp.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Photo");
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("DatingApp.Api.Models.User", b =>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.Api.Data;
+using DatingApp.Api.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +38,7 @@ namespace DatingApp.Api
                 opt.SerializerSettings.ReferenceLoopHandling =  Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper();
             services.AddTransient<Seeds>();
             services.AddScoped<IAuthRepository, AuthRepository>();//addscope mean service create ones each scope
@@ -70,7 +72,7 @@ namespace DatingApp.Api
 
             //app.UseHttpsRedirection();
             // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
-             //seeder.SeedUsers();
+           //  seeder.SeedUsers();
             app.UseCors(x => x.WithOrigins("http://localhost:4200")
                            .AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             app.UseAuthentication(); // to tell our application about it
