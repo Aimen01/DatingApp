@@ -12,7 +12,6 @@ export class MemberListResolver implements Resolve<User[]> {
         private alertifyService: AlertifyService) {}
 
         resolve(route: ActivatedRouteSnapshot): Observable<User[]> {
-            console.log('sdsada');
        return this.userService.getusers().pipe(
            catchError ( error => {
             this.alertifyService.error('problem reteving data');
