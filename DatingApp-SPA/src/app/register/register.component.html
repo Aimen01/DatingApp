@@ -82,7 +82,6 @@
     <div class="invalid-feedback" *ngIf="registerForm.hasError('mismatch') 
   && registerForm.get('confirmPassword').touched">
       Pssword must match</div>
-
   </div>
   <div class="form-group text-center">
     <button class="btn btn-success" [disabled]="!registerForm.valid" type="submit">Register</button>

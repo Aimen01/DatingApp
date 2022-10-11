@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { AlertifyService } from './../_services/alertify.service';
+import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from './../_services/Auth.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';

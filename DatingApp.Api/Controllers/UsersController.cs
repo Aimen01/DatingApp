@@ -13,14 +13,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace DatingApp.Api.Controllers
 {
     [ServiceFilter(typeof(LogUserActivity))]
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController] // when use api controller no need to do [fromBody] in post.
     public class UsersController : Controller
     {
         private readonly IDatingRepository _repo;
         private readonly IMapper _mapper;
-        private bool claimTypes;
+    
 
         public UsersController(IDatingRepository repo, IMapper mapper)
         {
@@ -64,7 +64,7 @@ namespace DatingApp.Api.Controllers
 
             var userFroRepo = await _repo.GetUser(id);
             
-            _mapper.Map(userForUpdateDto,userFroRepo);
+            _mapper.Map(userForUpdateDto,userFroRepo); //101
            if (await _repo.SaveAll())
            return NoContent();
 
@@ -78,7 +78,6 @@ namespace DatingApp.Api.Controllers
             return Unauthorized();
 
             var like = await _repo.GetLike(id, recipientId);
-     
 
             if (like != null)
                 return BadRequest("You are already liked this user");
@@ -87,7 +86,7 @@ namespace DatingApp.Api.Controllers
                 return NotFound();
 
             like = new Like {
-                      LikerId  = id,
+                  LikerId  = id,
                   LikeeId = recipientId
                 };
            _repo.add<Like>(like);

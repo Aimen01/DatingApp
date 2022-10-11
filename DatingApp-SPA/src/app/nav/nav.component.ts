@@ -1,7 +1,8 @@
-import { AlertifyService } from './../_services/alertify.service';
+import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from './../_services/Auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Routes, Router } from '@angular/router';
+import { PresenceService } from '../_services/presence.service';
 
 @Component({
   selector: 'app-nav',
@@ -12,10 +13,10 @@ export class NavComponent implements OnInit {
 
   model: any = {};
   photoUrl: string;
-  constructor(public authService: AuthService, private alertify: AlertifyService,
-     private router: Router) { }
+  constructor(public authService: AuthService, private alertify: AlertifyService, private presence: PresenceService
+    , private router: Router) { }
   ngOnInit() {
-    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl );
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
   login() {
     this.authService.login(this.model).subscribe(next => {
@@ -25,7 +26,7 @@ export class NavComponent implements OnInit {
     },
       () => {
         this.router.navigate(['/members']);
-    });
+      });
   }
   loggedIn() {
     return this.authService.loggedIn();
@@ -39,6 +40,6 @@ export class NavComponent implements OnInit {
     this.authService.currentUser = null;
     this.alertify.message('logged out');
     this.router.navigate(['/home']);
-
+    this.presence.stopHubConnection();
   }
 }

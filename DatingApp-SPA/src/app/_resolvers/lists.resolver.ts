@@ -15,6 +15,7 @@ likeParam = 'likers';
         private alertifyService: AlertifyService) {}
 
         resolve(route: ActivatedRouteSnapshot): Observable<User[]> {
+            console.log(this.likeParam);
        return this.userService.getusers(this.pageNumber, this.pageSize, null, this.likeParam).pipe(
            catchError ( error => {
             this.alertifyService.error('problem reteving data');

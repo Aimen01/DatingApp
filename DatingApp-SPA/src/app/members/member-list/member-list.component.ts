@@ -1,6 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { User } from './../../_models/user';
-import { AlertifyService } from './../../_services/alertify.service';
+import { AlertifyService } from '../../_services/alertify.service';
 import { UserService } from './../../_services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { Pagination, PaginatedResult } from 'src/app/_models/Pagination';
@@ -28,9 +28,10 @@ export class MemberListComponent implements OnInit {
     this.userParams.maxAge = 99;
   }
   pageChanged(event: any): void {
+    console.log('dd',event.page);
     this.pagination.currentPage = event.page;
     console.log(this.pagination.currentPage);
-    this.loadUsers();
+      this.loadUsers();
   }
   resetFilters() {
     this.userParams.gender = this.user.gender === 'female' ? 'male' :  'female';

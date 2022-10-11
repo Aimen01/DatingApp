@@ -1,6 +1,6 @@
 import { AuthService } from './../../_services/Auth.service';
 import { UserService } from './../../_services/user.service';
-import { AlertifyService } from './../../_services/alertify.service';
+import { AlertifyService } from '../../_services/alertify.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewChild, HostListener  } from '@angular/core';
 import { User } from 'src/app/_models/user';

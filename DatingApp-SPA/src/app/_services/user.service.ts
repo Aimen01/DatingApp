@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from '../_models/user';
 import { PaginatedResult } from '../_models/Pagination';
 import { map } from 'rxjs/operators';
+import { PresenceService } from './presence.service';
 
 // const httpOptions = {
 //   headers : new HttpHeaders({
@@ -33,14 +34,13 @@ params = params.append('minAge', userParams.minAge);
 params = params.append('maxAge', userParams.maxAge);
 params = params.append('gender', userParams.gender);
 params = params.append('orderBy', userParams.orderBy);
-
 }
 
-if (likesParam === 'likers') {
+if (likesParam === 'Likers') {
   params = params.append('likers', 'true');
 }
 
-if (likesParam === 'likees') {
+if (likesParam === 'Likees') {
   params = params.append('likees', 'true');
 }
   return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params})

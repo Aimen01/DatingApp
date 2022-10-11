@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { AlertifyService } from './../_services/alertify.service';
+import { AlertifyService } from '../_services/alertify.service';
 import { UserService } from './../_services/user.service';
 import { AuthService } from './../_services/Auth.service';
 import { Pagination, PaginatedResult } from './../_models/Pagination';
@@ -12,24 +12,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./lists.component.css']
 })
 export class ListsComponent implements OnInit {
-users: User[];
-pagination: Pagination;
-likesParam: string;
-
-  constructor(private authService: AuthService, private userService: UserService,
-    private alertifyService: AlertifyService, private activatedRoute: ActivatedRoute) { }
-
+  users: User[];
+  pagination: Pagination;
+  likesParam: string;
+  constructor(private userService: UserService, private alertifyService: AlertifyService,
+    private route: ActivatedRoute ) {}
   ngOnInit() {
-    this.activatedRoute.data.subscribe(data => {
-      this.users = data['users'].result;
-      this.pagination = data['users'].Pagination;
-      this.likesParam = 'likers' ;
+   this.route.data.subscribe(data => {
+     this.users = data['users'].result;
+     this.pagination = data['users'].pagination;
     });
+
+     this.likesParam ='Likers'
   }
+  pageChanged(event: any): void {
+
+    this.pagination.currentPage = event.page;
+    console.log(this.pagination.currentPage);
+    this.loadUsers();
+  }
+ 
   loadUsers() {
     this.userService
-    .getusers(this.pagination.currentPage, this.pagination.itemsPerPage,
-      null, this.likesParam)
+    .getusers(this.pagination.currentPage, this.pagination.itemsPerPage, null, this.likesParam
+       )
     .subscribe(
       (res: PaginatedResult<User[]>) => {
         this.users = res.result;
@@ -38,9 +44,5 @@ likesParam: string;
     }, err => this.alertifyService.error('not working!')
     );
     }
-    pageChanged(event: any): void {
-      this.pagination.currentPage = event.page;
-      console.log(this.pagination.currentPage);
-      this.loadUsers();
-    }
 }
+
